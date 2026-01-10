@@ -122,11 +122,21 @@ I also generated a data profile using \texttt{ydata-profiling}, which is also in
 
 % --------------------------------------------------------------------
 
-\section{Problem Definition (0.5 page)}
-\begin{itemize}[leftmargin=*]
-    \item Precise formulation of the prediction/classification task.
-    \item Type of task and justification for the chosen method.
-\end{itemize}
+\section{Problem Definition}
+
+The problem can be formulated as follows: given information about a flight, we want to predict the ticket price in Indian Rupees (INR).
+
+This is a supervised learning problem, because the dataset contains labeled data (flights with known prices). More specifically, this is a regression task, because we predict the price, which is a continuous numerical value.
+
+For this project, I chose to use Random Forest Regression as the main prediction algorithm. Random Forest is a type of ensemble method that builds many decision trees and combines their predictions. This choice is justified by several reasons.
+
+First, works well with both numerical and categorical features, which matches the dataset.
+
+Second, Random Forest can capture non-linear relationships. The relationship between features and price is not always linear.
+
+Fourth, Random Forest handles feature interactions automatically. The price may depend on combinations of features, and the model discovers these interactions during training without manual specification.
+
+Finally, the model is less prone to overfitting compared to a single decision tree.
 
 % --------------------------------------------------------------------
 
