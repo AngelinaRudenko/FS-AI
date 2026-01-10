@@ -8,6 +8,7 @@
 \usepackage{hyperref}
 \usepackage{setspace}
 \usepackage{enumitem}
+% \usepackage{pdfpages}
 
 \setlength{\parskip}{0.9em}
 \setlength{\parindent}{0pt}
@@ -31,14 +32,93 @@
 
 % --------------------------------------------------------------------
 
-\section{Dataset Description (1--2 pages)}
+\section{Dataset Description}
+
+\textbf{Dataset Name:} Flight Price Prediction
+
+\textbf{Source:} Kaggle
+
+\textbf{URL:} \href{https://www.kaggle.com/datasets/shubhambathwal/flight-price-prediction/data}{Kaggle Dataset Link}
+
+This dataset contains information about flight booking options from the website "Ease My Trip" for travel between India's top 6 metro cities.
+The data shows different flight options with their prices, airlines, departure times, and other details.
+
+Data was collected for 50 days, from February 11th to March 31st, 2022.
+
+The original dataset includes 3 CSV files:
+
 \begin{itemize}[leftmargin=*]
-    \item Dataset origin (source + link).
-    \item Types of attributes, size, time coverage (if relevant).
-    \item Exploratory analysis: statistics, distributions, basic plots.
-    \item Identification of dataset issues (imbalance, noise, correlations, missing values, outliers...).
-    \item Optional data profile created with \texttt{ydata-profiling} (attach in appendix).
+    \item \textbf{business.csv} -- 93487 business class flight records
+    \item \textbf{economy.csv} -- 206774 economy class flight records
+    \item \textbf{Clean\_Dataset.csv} -- 300153 flight records (combined and cleaned dataset)
 \end{itemize}
+
+For this project, I used the \textbf{Clean\_Dataset.csv} file because it combines both business and economy class flight records into a single dataset and has already been cleaned, with 108 invalid rows removed.
+
+The dataset consists of approximately 69\% economy class flights and 31\% business class flights, indicating a moderate imbalance toward economy class bookings that reflects real-world travel patterns.
+
+The dataset has 11 columns that describe each flight:
+
+\begin{itemize}[leftmargin=*]
+    
+    \item \textbf{airline} -- Airline company name 
+    (6 airlines: SpiceJet, AirAsia, Vistara, GO\_FIRST, Indigo, Air\_India).
+
+    \item \textbf{flight} -- Flight code or flight number  
+    (1561 unique flight codes).
+
+    \item \textbf{source\_city} -- Departure city  
+    (6 cities: Delhi, Mumbai, Bangalore, Kolkata, Hyderabad, Chennai).
+
+    \item \textbf{departure\_time} -- Time of day when the flight departs  
+    (6 time periods: Early\_Morning, Morning, Afternoon, Evening, Night, Late\_Night).
+
+    \item \textbf{stops} -- Number of stops during the flight  
+    (3 categories: zero, one, two\_or\_more).
+
+    \item \textbf{arrival\_time} -- Time of day when the flight arrives  
+    (Same six time periods as the departure time).
+
+    \item \textbf{destination\_city} -- City where the flight arrives  
+    (Same six cities as the source city).
+
+    \item \textbf{class} -- Type of ticket  
+    (2 classes: economy, business).
+
+    \item \textbf{duration} -- Total flight duration in hours  
+    (Range: 0.83 to 49.83 hours, with 476 distinct values).
+
+    \item \textbf{days\_left} -- Number of days remaining until departure  
+    (Range: 1 to 49 days).
+
+    \item \textbf{price} -- Flight ticket price in Indian Rupees.
+
+\end{itemize}
+
+There are three numerical features (\texttt{duration}, \texttt{days\_left}, \texttt{price}), while all other features are categorical text data.
+
+During the exploratory analysis, I found the following key points:
+
+\begin{itemize}
+    \item The mean ticket price is 20889.66, while the median price is 7425.00. This shows that the price distribution is highly skewed, with some very expensive tickets that increase the average price.
+    \item Most passengers travel in the economy class.
+    \item Most flights have one stop.
+    \item There are very few late-night flights.
+\end{itemize}
+
+During the identification of dataset issues, I found the following:
+
+\begin{itemize}
+    \item The dataset is fully complete, with no missing values in any of the columns.
+    \item The data do not contain significant outliers. Less than 1\% of the observations are outliers.
+    \item None of the numerical features (\texttt{duration}, \texttt{days\_left}, \texttt{price}) are highly correlated with each other.
+    \item There is a strong class imbalance in the \texttt{flight} and \texttt{departure\_time} columns. The imbalance ratios are approximately 54.48:1 for \texttt{departure\_time} and 3235:1 for \texttt{flight}.
+    \item For the \texttt{departure\_time} column, morning flights account for 24\% of the data, while late-night flights represent only 0.4\%. This suggests that people tend to avoid late flights.
+    \item For the \texttt{flight} column, this likely means that some flights operate much more often than others.
+\end{itemize}
+
+The plots used for the exploratory analysis and dataset issues identification are provided in the appendix.
+I also generated a data profile using \texttt{ydata-profiling}, which is also included in the appendix.
 
 % --------------------------------------------------------------------
 
@@ -102,6 +182,99 @@
 % --------------------------------------------------------------------
 
 \section*{Appendices}
+
+\section*{Appendix: Dataset Description Plots}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/exploratory-analysis-price-distribution-histogram.png}
+    \caption{Price distribution of airline tickets.}
+    \label{fig:price_distribution}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/numerical-features-distribution.png}
+    \caption{Other numerical attributes distribution.}
+    \label{fig:numerical-features-distribution}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/categorical-features-distribution.png}
+    \caption{Categorical attributes distribution.}
+    \label{fig:categorical-features-distribution}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/correlation-matrix.png}
+    \caption{Correlation matrix.}
+    \label{fig:correlation-matrix}
+\end{figure}
+
+\section*{Appendix: Data Profile}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/data-profile-report01.png}
+    \caption{Data Profile Report - part 1.}
+    \label{fig:data-profile-report1}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/data-profile-report02.png}
+    \caption{Data Profile Report - part 2.}
+    \label{fig:data-profile-report2}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/data-profile-report03.png}
+    \caption{Data Profile Report - part 3.}
+    \label{fig:data-profile-report3}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/data-profile-report04.png}
+    \caption{Data Profile Report - part 4.}
+    \label{fig:data-profile-report4}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/data-profile-report05.png}
+    \caption{Data Profile Report - part 5.}
+    \label{fig:data-profile-report5}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/data-profile-report06.png}
+    \caption{Data Profile Report - part 6.}
+    \label{fig:data-profile-report6}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/data-profile-report07.png}
+    \caption{Data Profile Report - part 7.}
+    \label{fig:data-profile-report7}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/data-profile-report08.png}
+    \caption{Data Profile Report - part 8.}
+    \label{fig:data-profile-report8}
+\end{figure}
+
+
+
+
+
 \begin{itemize}[leftmargin=*]
     \item Data profiling outputs.
     \item Selected code excerpts.
