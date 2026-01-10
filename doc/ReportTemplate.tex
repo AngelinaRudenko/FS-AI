@@ -1,0 +1,159 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{enumitem}
+
+\setlength{\parskip}{0.9em}
+\setlength{\parindent}{0pt}
+
+\title{Artificial Intelligence -- Semester Project \\[0.5em]
+\large Data Analysis and Application of a Selected Machine Learning Method}
+\author{Anhelina Rudzenka rudzeanh@fel.cvut.cz}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Project Instructions}
+This document serves as the mandatory template for the final report. Fill in each section according to the required scope. \
+The project is completed \emph{in pairs}.
+
+Datasets must originate from \emph{real or open sources} (not from library benchmarks such as \texttt{Iris}, \texttt{MNIST}, \texttt{Breast Cancer}, \texttt{Wine}, etc.). \
+
+The use of generative AI tools (e.g., ChatGPT, Gemini, Mistral, Copilot) is permitted. If AI is used, the report must include a separate declaration at the end describing how AI was used (only if it was actually used), such as for consultation, generating code fragments, or proofreading. However, AI must not replace real understanding — each student must be able to explain in detail the chosen method, its parameters, data preprocessing, code, and interpretation of results during the oral exam. Failure to do so may affect the project grade and the oral exam.
+
+The recommended length of the report is \emph{8–12 pages excluding appendices}.  \
+
+% --------------------------------------------------------------------
+
+\section{Possible Open Data Sources}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Kaggle Datasets:} \url{https://www.kaggle.com/datasets}
+    \item \textbf{Google Dataset Search:} \url{https://datasetsearch.research.google.com}
+    \item \textbf{UCI Machine Learning Repository (excluding common benchmarks):}  \
+          \url{https://archive.ics.uci.edu}
+    \item \textbf{OpenML (avoid classic textbook datasets):}  \
+          \url{https://www.openml.org}
+    \item \textbf{Data.gov (USA):} \url{https://www.data.gov}
+    \item \textbf{EU Open Data Portal:} \url{https://data.europa.eu}
+    \item \textbf{Czech Open Data Portals:}  \
+    \begin{itemize}
+        \item \url{https://data.gov.cz}  
+        \item \url{https://opendata.praha.eu}  
+        \item \url{https://opendata.brno.cz}
+    \end{itemize}
+    \item \textbf{OpenWeather, NOAA, and other meteorological data}
+    \item \textbf{GitHub repositories with raw data} (e.g., sensor data, logs)
+    \item \textbf{Local data sources} (non-personal — e.g., smart home logs, sports sensor data)
+\end{itemize}
+
+% --------------------------------------------------------------------
+
+\section{Introduction (0.5--1 page)}
+\begin{itemize}[leftmargin=*]
+    \item Brief introduction to the selected method and problem.
+    \item Motivation for dataset choice and its relevance.
+    \item Structure of the report.
+\end{itemize}
+
+% --------------------------------------------------------------------
+
+\section{Dataset Description (1--2 pages)}
+\begin{itemize}[leftmargin=*]
+    \item Dataset origin (source + link).
+    \item Types of attributes, size, time coverage (if relevant).
+    \item Exploratory analysis: statistics, distributions, basic plots.
+    \item Identification of dataset issues (imbalance, noise, correlations, missing values, outliers...).
+    \item Optional data profile created with \texttt{ydata-profiling} (attach in appendix).
+\end{itemize}
+
+% --------------------------------------------------------------------
+
+\section{Problem Definition (0.5 page)}
+\begin{itemize}[leftmargin=*]
+    \item Precise formulation of the prediction/classification task.
+    \item Type of task and justification for the chosen method.
+\end{itemize}
+
+% --------------------------------------------------------------------
+
+\section{Data Preprocessing (1--2 pages)}
+\begin{itemize}[leftmargin=*]
+    \item Identified dataset issues and how they were addressed.
+    \item Preprocessing steps (cleaning, imputation, scaling, feature selection, transformations...).
+    \item Justification with respect to the chosen method.
+\end{itemize}
+
+% --------------------------------------------------------------------
+
+\section{Machine Learning Method (1--2 pages)}
+\begin{itemize}[leftmargin=*]
+    \item Principle and brief mathematical description.
+    \item Explanation of parameters and their configuration.
+    \item For more complex methods: model architecture or tuning strategy.
+\end{itemize}
+
+% --------------------------------------------------------------------
+
+\section{Experiments and Results (2--3 pages)}
+\begin{itemize}[leftmargin=*]
+    \item Splitting into training, validation, and test sets.
+    \item Baseline, hyperparameter tuning, cross-validation (if appropriate).
+    \item Selected metrics:
+    \begin{itemize}
+        \item regression: MSE, RMSE, MAE, $R^2$, Adjusted $R^2$,
+        \item classification: accuracy, precision, recall, F1, AUC-ROC, confusion matrix.
+    \end{itemize}
+    \item Plots: learning curves, ROC, predicted vs. actual values.
+    \item Interpretation of results — what they mean and why.
+\end{itemize}
+
+% --------------------------------------------------------------------
+
+\section{Discussion (1 page)}
+\begin{itemize}[leftmargin=*]
+    \item Evaluation of strengths and weaknesses.
+    \item What worked well and what did not, and why.
+    \item Possible alternatives and future improvements.
+\end{itemize}
+
+% --------------------------------------------------------------------
+
+\section{Conclusion (0.5--1 page)}
+\begin{itemize}[leftmargin=*]
+    \item Summary of approach and key findings.
+    \item Whether the objective was met and why.
+    \item Short summary of lessons learned.
+\end{itemize}
+
+% --------------------------------------------------------------------
+
+\section*{Appendices}
+\begin{itemize}[leftmargin=*]
+    \item Data profiling outputs.
+    \item Selected code excerpts.
+    \item Additional tables and figures.
+\end{itemize}
+
+\section*{Declaration of Generative AI Usage (if applicable)}
+This section is required only if generative AI tools were used during the project.
+\
+\textbf{Sample declaration:}
+\
+\begin{quote}
+As part of this semester project, we used generative AI tools (e.g., ChatGPT / GitHub Copilot) for the following purposes: \
+\begin{itemize}
+    \item consulting theoretical explanations and verifying correctness,
+    \item drafting or reviewing parts of the code,
+    \item language proofreading of the text.
+\end{itemize}
+We fully understand all methods, code, and interpretations used in this work and can independently explain them during the oral exam. We acknowledge that we bear full responsibility for the correctness of all content, calculations, code, and conclusions presented in this project.
+\end{quote}
+
+\end{document}
