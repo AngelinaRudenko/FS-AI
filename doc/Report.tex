@@ -34,15 +34,12 @@
 
 \section{Dataset Description}
 
-\textbf{Dataset Name:} Flight Price Prediction
-
-\textbf{Source:} Kaggle
-
+\textbf{Dataset Name:} Flight Price Prediction \\
+\textbf{Source:} Kaggle \\
 \textbf{URL:} \href{https://www.kaggle.com/datasets/shubhambathwal/flight-price-prediction/data}{Kaggle Dataset Link}
 
 This dataset contains information about flight booking options from the website "Ease My Trip" for travel between India's top 6 metro cities.
 The data shows different flight options with their prices, airlines, departure times, and other details.
-
 Data was collected for 50 days, from February 11th to March 31st, 2022.
 
 The original dataset includes 3 CSV files:
@@ -128,7 +125,9 @@ The problem can be formulated as follows: given information about a flight, we w
 
 This is a supervised learning problem, because the dataset contains labeled data (flights with known prices). More specifically, this is a regression task, because we predict the price, which is a continuous numerical value.
 
-For this project, I chose to use Random Forest Regression as the main prediction algorithm. Random Forest is a type of ensemble method that builds many decision trees and combines their predictions. This choice is justified by several reasons.
+For this project, I chose to use Random Forest Regression as the main prediction algorithm. 
+Random Forest Regression builds many decision trees and combines their predictions to make a strong model.
+This choice is justified by several reasons.
 
 First, works well with both numerical and categorical features, which matches the dataset.
 
@@ -140,21 +139,75 @@ Finally, the model is less prone to overfitting compared to a single decision tr
 
 % --------------------------------------------------------------------
 
-\section{Data Preprocessing (1--2 pages)}
-\begin{itemize}[leftmargin=*]
-    \item Identified dataset issues and how they were addressed.
-    \item Preprocessing steps (cleaning, imputation, scaling, feature selection, transformations...).
-    \item Justification with respect to the chosen method.
-\end{itemize}
+\section{Data Preprocessing}
+
+During the exploratory data analysis in the previous chapter, I checked the dataset for common problems. Here, I describe the issues found and how they were addressed.
+
+\textbf{Outliers}\\
+\textit{Issue:} Some flights had unusually long durations or very high prices.\\
+\textit{Action:} I kept all outliers in the dataset. This is because Random Forest models handle outliers well, and these extreme values represent real scenarios, such as multi-stop journeys or business class tickets peak times. Removing them could discard useful information about expensive flight options.
+
+\textbf{Irrelevant Features}\\
+\textit{Issue:} The \texttt{Unnamed: 0} column was only an index. The \texttt{flight} column contained flight codes, which had too many unique values and mostly reflected historical data, not useful for learning general price patterns.\\
+\textit{Action:} Both columns were removed. This reduced noise and made the data simpler for the model.
+
+I applied the following preprocessing steps:
+
+\begin{enumerate}
+    \item \textbf{Feature Selection:} The \texttt{Unnamed: 0} and \texttt{flight} columns were removed as they were irrelevant.
+    
+    \item \textbf{Separating Features and Target Variable:} The dataset was split into features ($X$) and the target variable ($y$). The target variable was the \texttt{price} column, while $X$ contained all other columns used for prediction.
+    
+    \item \textbf{Encoding Categorical Data:} All categorical features were converted from text labels to numbers using label encoding. Machine learning algorithms, including Random Forest, require numerical input.
+    
+    \item \textbf{Train-Test Split:} The dataset was divided into training and testing sets. The training set contained 80\% of the data for model learning, and the test set contained 20\% to evaluate model performance on unseen data.
+\end{enumerate}
+
+Each preprocessing step was chosen to ensure that the data would be suitable for Random Forest regression, which works best with clean, relevant, and numerical data.
 
 % --------------------------------------------------------------------
 
-\section{Machine Learning Method (1--2 pages)}
-\begin{itemize}[leftmargin=*]
-    \item Principle and brief mathematical description.
-    \item Explanation of parameters and their configuration.
-    \item For more complex methods: model architecture or tuning strategy.
-\end{itemize}
+\section{Machine Learning Method}
+
+Random Forest is an ensemble learning method that combines multiple decision trees to make predictions. Instead of relying on a single decision tree, it builds many trees and averages their results to get a final prediction.
+
+The algorithm creates multiple random subsets of the training data. Each subset is created by randomly selecting samples with replacement (some samples can appear multiple times, others not at all).
+
+For each data subset, a decision tree is built. However, when splitting nodes in the tree, only a random subset of features is considered at each split point. This makes the trees different from each other.
+
+When we want to predict a value for new data, all trees make their own predictions. The final prediction is the average of all tree predictions.
+
+Mathematically, if we have $N$ decision trees in the forest, and each tree $i$ makes a prediction $\hat{y}_i(x)$ for an input $x$, the final prediction $\hat{y}(x)$ is given by:
+
+\[
+\hat{y}(x) = \frac{1}{N} \sum_{i=1}^{N} \hat{y}_i(x)
+\]
+
+This averaging helps to reduce overfitting and improves generalization compared to a single decision tree.
+
+Random Forest Regression has several important parameters that control how the model is built:
+
+\begin{description}
+    \item[\texttt{n\_estimators}] 
+    This parameter defines the number of trees in the forest. A larger number usually improves performance, but it also increases training time. In practice, values between 100 and 300 are often used.
+
+    \item[\texttt{max\_depth}] 
+    This parameter sets the maximum depth of each tree. Limiting the depth can prevent overfitting. However, if set too low, it may lead to underfitting.
+
+    \item[\texttt{min\_samples\_split}] 
+    This is the minimum number of samples required to split an internal node. Higher values prevent the tree from learning too specific patterns.
+
+    \item[\texttt{min\_samples\_leaf}] 
+    This parameter defines the minimum number of samples in a leaf node. It helps to smooth the predictions and reduce noise.
+
+    \item[\texttt{max\_features}] 
+    This defines how many features are randomly selected at each split.
+
+    \item[\texttt{random\_state}] 
+    This parameter is used to make the results reproducible. Setting it to a fixed number ensures that the same random choices are made each time the model is trained.
+\end{description}
+
+Random Forest structure is defined by a collection of independent decision trees. Each tree has a hierarchical structure with internal decision nodes and leaf nodes that store prediction values.
 
 % --------------------------------------------------------------------
 
@@ -280,16 +333,6 @@ Finally, the model is less prone to overfitting compared to a single decision tr
     \caption{Data Profile Report - part 8.}
     \label{fig:data-profile-report8}
 \end{figure}
-
-
-
-
-
-\begin{itemize}[leftmargin=*]
-    \item Data profiling outputs.
-    \item Selected code excerpts.
-    \item Additional tables and figures.
-\end{itemize}
 
 \section*{Declaration of Generative AI Usage}
 
