@@ -21,18 +21,45 @@
 \begin{document}
 \maketitle
 
+\href{https://colab.research.google.com/drive/14Ko9NzpKZGfawO7YVp_15a5EEHjBnkYC?usp=sharing}{Google Colab Link}
 
-% Google COllab link to the code:
-% https://colab.research.google.com/drive/14Ko9NzpKZGfawO7YVp_15a5EEHjBnkYC?usp=sharing
+\href{https://github.com/AngelinaRudenko/FS-AI}{GitHub Link}
 
 % --------------------------------------------------------------------
 
-\section{Introduction (0.5--1 page)}
+\section{Introduction}
 \begin{itemize}[leftmargin=*]
     \item Brief introduction to the selected method and problem.
     \item Motivation for dataset choice and its relevance.
     \item Structure of the report.
 \end{itemize}
+
+This project focuses on predicting flight prices using machine learning. The goal is to build a model that can estimate how much a flight will cost based on features like source and departure cities, airline and flight class.
+
+I chose to use Random Forest Regression as machine learning method, because it can handle different types of data (numbers and categories) and usually gives good results without needing complicated setup.
+
+I used a dataset of 300153 flight records from the India flight market in 2022. This dataset includes information about 6 airlines, 6 cities, and different flight classes (economy and business). I chose this dataset because:
+
+\begin{itemize}[leftmargin=*]
+    \item It's large enough to train a model.
+    \item It contains real flight data.
+    \item The features are easy to understand
+\end{itemize}
+
+This documentation is organized as follows:
+
+\begin{itemize}[leftmargin=*]
+    \item Section 2 - Dataset Description: Details about the data, including features and basic statistics.
+    \item Section 3 - Problem Definition: Explanation of the prediction task and chosen machine learning method.
+    \item Section 4 - Data Preprocessing: How I cleaned and prepared the data for machine learning.
+    \item Section 5 - Machine Learning Method: Description of the Random Forest algorithm and its parameters.
+    \item Section 6 - Experiments and Results: Describes machine learning models I built, how I evaluated them, and the final results.
+    \item Section 7 - Discussion: What worked well, what didn't work, and ideas for future improvements.
+    \item Section 8 - Conclusion: Summary of the project and key findings
+    \item Appendices: Additional plots and data profiles used in the analysis.
+\end{itemize}
+
+The goal of this project is to demonstrate practical machine learning skills by solving a real-world prediction problem from start to finish.
 
 % --------------------------------------------------------------------
 
