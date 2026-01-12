@@ -391,21 +391,51 @@ The plot shows mostly random scatter around the zero line, which is good. Some d
 
 % --------------------------------------------------------------------
 
-\section{Discussion (1 page)}
-\begin{itemize}[leftmargin=*]
-    \item Evaluation of strengths and weaknesses.
-    \item What worked well and what did not, and why.
-    \item Possible alternatives and future improvements.
-\end{itemize}
+\section{Discussion}
+
+\noindent\textbf{Strengths of the Model}
+
+\noindent\textit{High Accuracy.} The final model achieved an R² score of 98.56\%, which means it can explain more than 98\% of the variation in flight prices. This is a good result.
+
+\noindent\textit{No Overfitting.} The difference between training performance (R² = 99.32\%) and testing performance (R² = 98.56\%) is very small. This shows that the model learned real patterns instead of just memorizing the training data.
+
+\medskip
+\noindent\textbf{Weaknesses of the Model}
+
+\noindent\textit{One Feature Dominates.} The class feature has 82\% importance, which means the model relies heavily on just one piece of information. I expected departure and arrival times and cities to be more important. The dataset might not have enough variation in prices by time. Business class is expensive regardless of whether the flight departs in the morning or evening.
+
+\noindent\textit{Larger Errors for Expensive Flights.} Looking at the residual plot, I noticed that errors are bigger for expensive flights. The model is less accurate when predicting high prices. This happened because there are fewer expensive flights in the dataset (most flights are economy class). The model has less training data for expensive flights, so it makes bigger errors for them.
+
+\medskip
+\noindent\textbf{What Worked Well and Why}
+
+\noindent\textit{Random Forest Algorithm.} Random Forest worked well for this problem. It handled different types of features (numbers and categories) without problems and didn't need much tuning. It worked because Random Forest can capture complex relationships (for example, that business class flights to certain cities are more expensive), it is robust and doesn't overfit easily, and it works well with categorical features like airline and city names.
+
+\noindent\textit{Label Encoding.} I used Label Encoding to convert categorical features (like airline names) into numbers. This worked well and Random Forest could handle this type of encoding.
+
+\medskip
+\noindent\textbf{Possible Alternatives}
+
+\noindent Instead of one model for all flights, I could create two separate models: one for economy class flights and one for business class flights. This might help because each model could focus on the price variations within that class.
 
 % --------------------------------------------------------------------
 
-\section{Conclusion (0.5--1 page)}
+\section{Conclusion}
+
+Overall, I'm satisfied with the results of this project. The Random Forest model achieved good accuracy (98.56\% R²) and works reliably on new data. The most important finding is that flight class dominates price prediction in the Indian market and this one factor explains 82\% of price variation.
+
+The main limitation is that the model relies too heavily on this one feature, which means it might not be very useful for comparing flights within the same class. If I continue this project, I would focus on collecting more diverse data (especially expensive flights) and creating separate models for each class.
+
+I learned that sometimes simple approaches work best. I spent time on hyperparameter tuning and got only small improvements, while the baseline model was already very good. I also learned the importance of visualizations - the residual plot helped me understand where the model struggles (expensive flights).
+
+This project gave me practical experience with:
 \begin{itemize}[leftmargin=*]
-    \item Summary of approach and key findings.
-    \item Whether the objective was met and why.
-    \item Short summary of lessons learned.
+    \item Real-world data preprocessing.
+    \item Feature engineering.
+    \item Model evaluation.
+    \item Interpreting visualizations to understand model behavior.
 \end{itemize}
+
 
 % --------------------------------------------------------------------
 
