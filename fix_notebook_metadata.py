@@ -1,7 +1,7 @@
 import json
 
 # Read the notebook
-notebook_path = r'c:\Programming\FS-AI\src\flight-price-prediciton.ipynb'
+notebook_path = r'c:\Programming\FS-AI\src\flight_price_prediciton.ipynb'
 
 with open(notebook_path, 'r', encoding='utf-8') as f:
     notebook = json.load(f)
