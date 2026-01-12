@@ -21,6 +21,10 @@
 \begin{document}
 \maketitle
 
+
+% Google COllab link to the code:
+% https://colab.research.google.com/drive/14Ko9NzpKZGfawO7YVp_15a5EEHjBnkYC?usp=sharing
+
 % --------------------------------------------------------------------
 
 \section{Introduction (0.5--1 page)}
@@ -88,7 +92,7 @@ The dataset has 11 columns that describe each flight:
     \item \textbf{days\_left} -- Number of days remaining until departure  
     (Range: 1 to 49 days).
 
-    \item \textbf{price} -- Flight ticket price in Indian Rupees.
+    \item \textbf{price} -- Flight ticket price in Indian Rupees (INR).
 
 \end{itemize}
 
@@ -211,18 +215,179 @@ Random Forest structure is defined by a collection of independent decision trees
 
 % --------------------------------------------------------------------
 
-\section{Experiments and Results (2--3 pages)}
-\begin{itemize}[leftmargin=*]
-    \item Splitting into training, validation, and test sets.
-    \item Baseline, hyperparameter tuning, cross-validation (if appropriate).
-    \item Selected metrics:
-    \begin{itemize}
-        \item regression: MSE, RMSE, MAE, $R^2$, Adjusted $R^2$,
-        \item classification: accuracy, precision, recall, F1, AUC-ROC, confusion matrix.
-    \end{itemize}
-    \item Plots: learning curves, ROC, predicted vs. actual values.
-    \item Interpretation of results — what they mean and why.
+\section{Experiments and Results}
+
+First, I created a baseline model to see how well Random Forest works with simple settings. The baseline model used the parameters shown in Table~\ref{tab:rf_baseline}.
+
+\begin{table}[h]
+\centering
+\caption{Random Forest Baseline Model Parameters}
+\label{tab:rf_baseline}
+\begin{tabular}{lll}
+\hline
+\textbf{Parameter} & \textbf{Value} & \textbf{Description} \\
+\hline
+\texttt{n\_estimators} & 100 & Number of decision trees \\
+\texttt{max\_depth} & None & Maximum depth of the trees \\
+\texttt{min\_samples\_split} & 2 & Minimum samples required to split a node \\
+\texttt{min\_samples\_leaf} & 1 & Minimum samples allowed in a leaf node \\
+\texttt{max\_features} & \texttt{sqrt} & Number of features considered at each split \\
+\texttt{random\_state} & 42 & Ensures reproducible results \\
+\texttt{n\_jobs} & -1 & Uses all available CPU cores \\
+\hline
+\end{tabular}
+\end{table}
+
+The baseline model achieved strong performance on the test dataset:
+\begin{itemize}
+    \item \textbf{Test $R^2$:} 0.9841 (98.41\%)
+    \item \textbf{Test MAE:} 1221.10 INR
+    \item \textbf{Test RMSE:} 2859.63 INR
 \end{itemize}
+
+These results were already very good, but I wanted to see if I could improve them.
+I manually adjusted the model parameters to try to improve performance. The final tuned model used the parameters shown in Table~\ref{tab:rf_tuned}.
+
+\begin{table}[h]
+\centering
+\caption{Random Forest Tuned Model Parameters}
+\label{tab:rf_tuned}
+\begin{tabular}{llll}
+\hline
+\textbf{Parameter} & \textbf{Baseline} & \textbf{Tuned} & \textbf{Why I changed it} \\
+\hline
+\texttt{n\_estimators} & 100 & 200 & More trees can make better predictions \\
+\texttt{max\_depth} & None & None & Kept unlimited (worked well) \\
+\texttt{min\_samples\_split} & 2 & 5 & Prevent trees from splitting too easily \\
+\texttt{min\_samples\_leaf} & 1 & 2 & Make predictions smoother \\
+\texttt{max\_features} & \texttt{'sqrt'} & 0.5 & Use 50\% of features for more variety \\
+\hline
+\end{tabular}
+\end{table}
+
+I manually tested different parameters and compared the results. Then I compared the baseline and tuned models on the testing set, as shown in Table~\ref{tab:model_comparison}.
+
+\begin{table}[h]
+\centering
+\caption{Comparison of Baseline and Tuned Models on the Testing Set}
+\label{tab:model_comparison}
+\begin{tabular}{llll}
+\hline
+\textbf{Metric} & \textbf{Baseline} & \textbf{Tuned} & \textbf{Improvement} \\
+\hline
+$R^2$ & 0.9841 & 0.9856 & +0.0014 \\
+Adjusted $R^2$ & 0.9841 & 0.9856 & +0.0014 \\
+MAE (INR) & 1221.10 & 1201.68 & --19.42 \\
+RMSE (INR) & 2859.63 & 2727.88 & --131.75 \\
+\hline
+\end{tabular}
+\end{table}
+
+The tuned model is better on all four metrics, and therefore it was selected as the final model.
+
+\textbf{Important note:} The training scores for the tuned model appear worse than those of the baseline model, which may seem suspicious. However, the testing performance is the key evaluation criterion. Since the testing scores improved, the tuned model generalizes better to unseen data, which is the primary objective.
+
+I used five different metrics to measure how well the model works:
+
+\textbf{$R^2$ (R-squared)} \\
+\textbf{Final value:} 0.9856 (98.56\%) \\
+\textbf{What it means:} The model explains 98.56\% of the differences in flight prices. \\
+\textbf{Interpretation:} Good result. Anything above 90\% is considered very good.
+
+\textbf{Adjusted $R^2$} \\
+\textbf{Final value:} 0.9856 (98.56\%) \\
+\textbf{What it means:} Same as $R^2$, but adjusted for the number of features. \\
+\textbf{Interpretation:} The value is the same as $R^2$, which confirms the model is truly good and not just inflated by having many features.
+
+\textbf{MAE (Mean Absolute Error)} \\
+\textbf{Final value:} INR 1201.68 \\
+\textbf{What it means:} On average, predictions are off by INR 1201.68. \\
+\textbf{Interpretation:} The average flight price is INR 20894, so an error of INR 1201.68 is 5.75\% of the average price. This is acceptable for price prediction.
+
+\textbf{RMSE (Root Mean Squared Error)} \\
+\textbf{Final value:} INR 2727.88 \\
+\textbf{What it means:} Similar to MAE, but gives more weight to large errors. \\
+\textbf{Interpretation:} This value is higher than MAE because it penalizes large mistakes more strongly. It indicates that some predictions are further off, but overall the model remains reliable.
+
+\textbf{MSE (Mean Squared Error)} \\
+\textbf{Final value:} INR 7441302.56 \\
+\textbf{What it means:} Average of squared errors. \\
+\textbf{Interpretation:} This metric is difficult to interpret directly because it is expressed in squared rupees. However, lower values indicate better performance. The RMSE, which is the square root of the MSE, is easier to interpret.
+
+After training the model, I also checked which features are most important for predicting flight prices. The resulting feature importance ranking is shown in Table~\ref{tab:feature_importance}.
+
+\begin{table}[h]
+\centering
+\caption{Feature Importance for Flight Price Prediction}
+\label{tab:feature_importance}
+\begin{tabular}{llll}
+\hline
+\textbf{Rank} & \textbf{Feature} & \textbf{Importance} & \textbf{Percentage} \\
+\hline
+1 & class & 0.8238 & 82.38\% \\
+2 & airline & 0.0631 & 6.31\% \\
+3 & duration & 0.0514 & 5.14\% \\
+4 & stops & 0.0171 & 1.71\% \\
+5 & days\_left & 0.0166 & 1.66\% \\
+6 & source\_city & 0.0097 & 0.97\% \\
+7 & destination\_city & 0.0096 & 0.96\% \\
+8 & arrival\_time & 0.0047 & 0.47\% \\
+9 & departure\_time & 0.0040 & 0.40\% \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Key findings:}
+\begin{itemize}
+    \item \textbf{Class} is by far the most important feature (82\%), which is expected since business class tickets are significantly more expensive than economy tickets.
+    \item \textbf{Airline} plays a notable role (6\%), as different airlines apply different pricing strategies.
+    \item \textbf{Duration} has a meaningful impact (5\%), with longer flights generally costing more.
+    \item \textbf{Departure time} and \textbf{arrival time} have minimal influence (less than 1\%) on ticket prices in this dataset.
+\end{itemize}
+
+This ranking helps to identify the primary factors driving flight prices in the Indian market.
+
+% Instead of ROC (ised for classification), I did residual plot
+
+The plot comparing actual and predicted flight prices is provided in Appendix~\ref{app:plots} (Figure~\ref{fig:actual_vs_predicted}).
+
+\textbf{What this plot shows:}
+\begin{itemize}
+    \item Each dot represents one flight
+    \item X-axis: actual price of the flight
+    \item Y-axis: price predicted by the model
+    \item Red dashed line: perfect predictions (predicted price equals actual price)
+\end{itemize}
+
+\textbf{Interpretation:}  
+Most points lie close to the red dashed line, indicating that the predictions are accurate. The points form a tight cluster around the diagonal, showing that the model successfully learned the underlying patterns in the data. There are some points that spread out (especially for expensive flights), but overall the fit is good.
+
+The distribution of prediction errors is shown in Appendix~\ref{app:plots} (Figure~\ref{fig:error_distribution}).
+
+\textbf{What this plot shows:}
+\begin{itemize}
+    \item How often the model makes different sized errors
+    \item X-axis: prediction error (actual price minus predicted price)
+    \item Y-axis: number of flights with a given error
+    \item Green line: average error (approximately zero)
+\end{itemize}
+
+\textbf{Interpretation:}  
+The histogram has a distribution centered around zero, which is the desired outcome. Most predictions have very small errors, as shown by the high bar near zero. Errors are balanced on both sides, indicating that the model does not systematically over-predict or under-predict.
+
+The residual plot is included in Appendix~\ref{app:plots} (Figure~\ref{fig:residual_plot}).
+
+\textbf{What this plot shows:}
+\begin{itemize}
+    \item Residuals (differences between actual and predicted prices)
+    \item X-axis: predicted price
+    \item Y-axis: residual (error)
+    \item Red line: zero error
+    \item Orange dotted lines: $\pm 1$ standard deviation ($\pm$INR 2728)
+\end{itemize}
+
+\textbf{Interpretation:}  
+The plot shows mostly random scatter around the zero line, which is good. Some diagonal striping is visible. This is normal for Random Forest models because they make predictions by combining many trees, which creates discrete levels in the predictions. Errors are slightly larger for expensive flights. This is normal for price data because expensive flights naturally have more variation.
 
 % --------------------------------------------------------------------
 
@@ -333,6 +498,39 @@ Random Forest structure is defined by a collection of independent decision trees
     \caption{Data Profile Report - part 8.}
     \label{fig:data-profile-report8}
 \end{figure}
+
+
+\section*{Appendix: Plots}
+\label{app:plots}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/PlotActualVsPredictedPrices.png}
+    \caption{Actual vs Predicted Flight Prices}
+    \label{fig:actual_vs_predicted}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/PlotDistributionOfPredictionErrors.png}
+    \caption{Distribution of Prediction Errors}
+    \label{fig:error_distribution}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/PlotResidual.png}
+    \caption{Residual Plot}
+    \label{fig:residual_plot}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/PlotLearningCurves.png}
+    \caption{Learning Curves}
+    \label{fig:learning_curve}
+\end{figure}
+
 
 \section*{Declaration of Generative AI Usage}
 
